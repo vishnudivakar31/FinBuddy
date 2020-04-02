@@ -112,28 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             if(task.isSuccessful()) {
                                 firebaseUser = auth.getCurrentUser();
                                 assert firebaseUser != null;
-                                collectionReference
-                                        .whereEqualTo(KEY_USER_ID, firebaseUser.getUid())
-                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
-                                                                @Nullable FirebaseFirestoreException e) {
-                                                assert queryDocumentSnapshots != null;
-                                                for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                                                    UserModel userModel = snapshot.toObject(UserModel.class);
-                                                    CurrentUser currentUser = CurrentUser.getInstance();
-                                                    currentUser.setUsername(userModel.getName());
-                                                    currentUser.setUserId(userModel.getUserId());
-                                                    Intent intent = new Intent(LoginActivity.this,
-                                                            CreateBillActivity.class);
-                                                    ActivityOptions options =
-                                                            ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this);
-                                                    startActivity(intent,options.toBundle());
-                                                    progressBar.setVisibility(View.GONE);
-                                                    finish();
-                                                }
-                                            }
-                                        });
+                                setCurrentUserAndView(firebaseUser.getUid());
                             } else {
                                 progressBar.setVisibility(View.GONE);
                                 showSnackBar(R.string.error_message);
@@ -148,5 +127,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void showSnackBar(int textID) {
         Snackbar.make(findViewById(R.id.login_activity), textID,
                 Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseUser = auth.getCurrentUser();
+        if(firebaseUser != null) {
+            setCurrentUserAndView(firebaseUser.getUid());
+        }
+    }
+
+    private void setCurrentUserAndView(String userId) {
+        collectionReference
+                .whereEqualTo(KEY_USER_ID, userId)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        assert queryDocumentSnapshots != null;
+                        for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            UserModel userModel = snapshot.toObject(UserModel.class);
+                            CurrentUser currentUser = CurrentUser.getInstance();
+                            currentUser.setUsername(userModel.getName());
+                            currentUser.setUserId(userModel.getUserId());
+                            Intent intent = new Intent(LoginActivity.this,
+                                    CreateBillActivity.class);
+                            ActivityOptions options =
+                                    ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this);
+                            startActivity(intent,options.toBundle());
+                            progressBar.setVisibility(View.GONE);
+                            finish();
+                        }
+                    }
+                });
     }
 }
