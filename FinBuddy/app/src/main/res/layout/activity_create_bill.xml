@@ -50,28 +50,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/create_bill_profile_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/profile_image_txt"
-            app:layout_constraintStart_toStartOf="@+id/create_bill_app_motto"
-            app:layout_constraintTop_toBottomOf="@+id/create_bill_app_motto"
-            app:srcCompat="@drawable/ic_person_icon_white" />
-
-        <TextView
-            android:id="@+id/create_bill_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:shadowColor="@color/common_google_signin_btn_text_dark_default"
-            android:text="@string/sample_username"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/create_bill_profile_icon"
-            app:layout_constraintStart_toEndOf="@+id/create_bill_profile_icon"
-            app:layout_constraintTop_toBottomOf="@+id/create_bill_app_motto" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
@@ -102,13 +80,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="4dp"
                 android:autofillHints=""
+                android:drawableLeft="@drawable/ic_shop"
                 android:ems="10"
                 android:hint="@string/shop_name_txt"
                 android:inputType="textPersonName"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/create_bill_date"
@@ -118,10 +98,11 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="18dp"
                 android:autofillHints=""
+                android:drawableLeft="@drawable/ic_date"
                 android:ems="10"
                 android:hint="@string/date_txt"
                 android:inputType="date"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -190,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:background="@android:color/transparent"
-                    android:drawableLeft="@drawable/ic_save_white"
+                    android:drawableStart="@drawable/ic_save_white"
                     android:padding="8dp"
                     android:text="@string/save_txt"
                     android:textColor="@color/common_google_signin_btn_text_dark_default"

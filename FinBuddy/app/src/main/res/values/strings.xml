@@ -28,4 +28,8 @@
     <string name="sample_rate">110.00</string>
     <string name="add_item_txt">Add Item</string>
     <string name="save_txt">Save</string>
+    <string name="bill_item_serial_number">1.</string>
+    <string name="sample_bill_item_title">Oats</string>
+    <string name="sample_bill_item_qty">Qty: 2</string>
+    <string name="sample_bill_item_price">Price: 50</string>
 </resources>
