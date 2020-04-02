@@ -5,16 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.transition.Slide;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -45,22 +44,20 @@ import io.wanderingthinkter.R;
 import io.wanderingthinkter.models.CurrentUser;
 import io.wanderingthinkter.models.UserModel;
 
+import static android.view.Gravity.RIGHT;
 import static io.wanderingthinkter.util.Constants.IMAGE_STORAGE;
 import static io.wanderingthinkter.util.Constants.USER_COLLECTION;
 
-public class CreateAccountActivity<FriebaseAuth> extends AppCompatActivity implements View.OnClickListener {
+public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int CAMERA_ACTION_CODE = 0;
     private static final int GALLERY_ACTION_CODE = 1;
-    private static final String TAG = "FinBuddy::CreateAccountActivity";
     private ImageView profilePictureButton;
     private EditText nameET, emailET, passwordET, confirmPasswordEt;
-    private Button createAccountBtn;
     private String imageUrl;
     private AlertDialog alertDialog;
-    private AlertDialog.Builder dialogBuilder;
     private ProgressBar progressBar;
-    private FirebaseAuth auth = FirebaseAuth.getInstance();;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference = db.collection(USER_COLLECTION);
@@ -77,7 +74,7 @@ public class CreateAccountActivity<FriebaseAuth> extends AppCompatActivity imple
         emailET = findViewById(R.id.create_account_email);
         passwordET = findViewById(R.id.create_account_password);
         confirmPasswordEt = findViewById(R.id.create_account_confirm_password);
-        createAccountBtn = findViewById(R.id.create_account_button);
+        Button createAccountBtn = findViewById(R.id.create_account_button);
         progressBar = findViewById(R.id.create_account_progressbar);
 
         profilePictureButton.setOnClickListener(this);
@@ -90,15 +87,14 @@ public class CreateAccountActivity<FriebaseAuth> extends AppCompatActivity imple
         currentUser = auth.getCurrentUser();
     }
 
+    @SuppressLint("RtlHardcoded")
     public void setAnimation() {
-        if(Build.VERSION.SDK_INT>20) {
-            Slide slide = new Slide();
-            slide.setSlideEdge(Gravity.RIGHT);
-            slide.setDuration(400);
-            slide.setInterpolator(new DecelerateInterpolator());
-            getWindow().setExitTransition(slide);
-            getWindow().setEnterTransition(slide);
-        }
+        Slide slide = new Slide();
+        slide.setSlideEdge(RIGHT);
+        slide.setDuration(400);
+        slide.setInterpolator(new DecelerateInterpolator());
+        getWindow().setExitTransition(slide);
+        getWindow().setEnterTransition(slide);
     }
 
     @Override
@@ -135,8 +131,9 @@ public class CreateAccountActivity<FriebaseAuth> extends AppCompatActivity imple
     }
 
     private void setAccountProfilePicture() {
-        dialogBuilder = new AlertDialog.Builder(CreateAccountActivity.this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(CreateAccountActivity.this);
         LayoutInflater inflater = getLayoutInflater();
+        @SuppressLint("InflateParams")
         View view = inflater.inflate(R.layout.image_capture_layout, null);
         view.findViewById(R.id.image_capture_camera).setOnClickListener(this);
         view.findViewById(R.id.image_capture_gallery).setOnClickListener(this);
@@ -217,6 +214,8 @@ public class CreateAccountActivity<FriebaseAuth> extends AppCompatActivity imple
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
                             currentUser = auth.getCurrentUser();
+                            assert currentUser != null;
+                            userModel.setUserId(currentUser.getUid());
                             collectionReference
                                     .add(userModel)
                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -265,15 +264,20 @@ public class CreateAccountActivity<FriebaseAuth> extends AppCompatActivity imple
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case GALLERY_ACTION_CODE:
+                    assert data != null;
                     Uri imageUri = data.getData();
                     profilePictureButton.setImageURI(imageUri);
+                    assert imageUri != null;
                     imageUrl = imageUri.toString();
                     break;
                 case CAMERA_ACTION_CODE:
+                    assert data != null;
                     Bundle extras = data.getExtras();
+                    assert extras != null;
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
                     profilePictureButton.setImageBitmap(imageBitmap);
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    assert imageBitmap != null;
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                     imageUrl = MediaStore.Images.Media.insertImage(getContentResolver(),
                             imageBitmap, "my_image" + Timestamp.now().getNanoseconds(), null);

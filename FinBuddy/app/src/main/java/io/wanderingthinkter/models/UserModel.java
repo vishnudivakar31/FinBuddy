@@ -3,12 +3,21 @@ package io.wanderingthinkter.models;
 import com.google.firebase.Timestamp;
 
 public class UserModel {
+    private String userId;
     private String name;
     private String email;
     private String profilePic;
     private Timestamp joinedDate;
 
     public UserModel() {
+    }
+
+    public UserModel(String userId, String name, String email, String profilePic, Timestamp joinedDate) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.profilePic = profilePic;
+        this.joinedDate = joinedDate;
     }
 
     public UserModel(String name, String email, Timestamp joinedDate) {
@@ -54,5 +63,13 @@ public class UserModel {
 
     public void setJoinedDate(Timestamp joinedDate) {
         this.joinedDate = joinedDate;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
