@@ -8,4 +8,14 @@
     <string name="forgot_password">Forgot Password</string>
     <string name="name_txt">Name</string>
     <string name="confirm_password_txt">Confirm Password</string>
+    <string name="profile_image_txt">profile image</string>
+    <string name="profile_image_button">profile image button</string>
+    <string name="profile_txt">Profile</string>
+    <string name="choose_image_txt">Choose Image</string>
+    <string name="camera_txt">Camera</string>
+    <string name="gallery_txt">Gallery</string>
+    <string name="cancel">cancel</string>
+    <string name="all_fields_are_mandatory">All fields are mandatory</string>
+    <string name="password_mismatch">Passwords are not matching.</string>
+    <string name="error_message">Oops!!! Something went wrong, Please try again later.</string>
 </resources>
