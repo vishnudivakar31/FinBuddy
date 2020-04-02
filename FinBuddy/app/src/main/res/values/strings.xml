@@ -6,4 +6,6 @@
     <string name="login_txt">login</string>
     <string name="create_account_txt">Create Account</string>
     <string name="forgot_password">Forgot Password</string>
+    <string name="name_txt">Name</string>
+    <string name="confirm_password_txt">Confirm Password</string>
 </resources>

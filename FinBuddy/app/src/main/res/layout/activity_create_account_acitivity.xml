@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="8dp"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".activities.CreateAccountActivity">
+
+    <androidx.cardview.widget.CardView
+        app:cardElevation="12dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/create_account_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/almendra_bold"
+            android:text="@string/app_name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/create_account_app_motto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/almendra_italic"
+            android:text="@string/app_motto"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/create_account_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="@string/create_account_txt"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/create_account_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/name_txt"
+            android:layout_marginBottom="2dp"
+            android:inputType="textPersonName"
+            android:drawableLeft="@drawable/ic_person_icon_dark"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/create_account_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/email_txt"
+            android:layout_marginBottom="2dp"
+            android:inputType="textEmailAddress"
+            android:drawableLeft="@drawable/ic_email_icon"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/create_account_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password_txt"
+            android:inputType="textPassword"
+            android:layout_marginBottom="2dp"
+            android:drawableLeft="@drawable/ic_password_icon"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/create_account_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/confirm_password_txt"
+            android:inputType="textPassword"
+            android:layout_marginBottom="8dp"
+            android:drawableLeft="@drawable/ic_password_icon"
+            android:textSize="14sp" />
+
+        <ProgressBar
+            android:id="@+id/create_account_progressbar"
+            android:visibility="gone"
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <Button
+            android:id="@+id/create_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/transparent_button_with_border"
+            android:text="@string/create_account_txt"
+            android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
