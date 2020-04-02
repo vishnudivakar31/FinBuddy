@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -149,10 +150,10 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     }
 
     private void createAccount() {
-        String username = nameET.getText().toString();
-        String email = emailET.getText().toString();
-        String password = passwordET.getText().toString();
-        String confirmPassword = confirmPasswordEt.getText().toString();
+        String username = nameET.getText().toString().trim();
+        String email = emailET.getText().toString().trim();
+        String password = passwordET.getText().toString().trim();
+        String confirmPassword = confirmPasswordEt.getText().toString().trim();
         if(!TextUtils.isEmpty(username) && !TextUtils.isEmpty(email) &&
                 !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword)) {
             if(!password.equals(confirmPassword)) {
@@ -190,7 +191,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     showSnackBar(R.string.error_message);
-                                    progressBar.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             });
                         }
@@ -199,7 +200,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             showSnackBar(R.string.error_message);
-                            progressBar.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
         }
@@ -224,9 +225,12 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                                             CurrentUser user = CurrentUser.getInstance();
                                             user.setUserId(currentUser.getUid());
                                             user.setUsername(username);
-                                            startActivity(new Intent(CreateAccountActivity.this,
-                                                    CreateBillActivity.class));
-                                            progressBar.setVisibility(View.VISIBLE);
+                                            Intent intent = new Intent(CreateAccountActivity.this,
+                                                    CreateBillActivity.class);
+                                            ActivityOptions options =
+                                                    ActivityOptions.makeSceneTransitionAnimation(CreateAccountActivity.this);
+                                            startActivity(intent,options.toBundle());
+                                            progressBar.setVisibility(View.GONE);
                                             finish();
                                         }
                                     })
@@ -234,12 +238,12 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             showSnackBar(R.string.error_message);
-                                            progressBar.setVisibility(View.VISIBLE);
+                                            progressBar.setVisibility(View.GONE);
                                         }
                                     });
                         } else {
                             showSnackBar(R.string.error_message);
-                            progressBar.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 })
@@ -247,7 +251,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         showSnackBar(R.string.error_message);
-                        progressBar.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
     }

@@ -18,4 +18,6 @@
     <string name="all_fields_are_mandatory">All fields are mandatory</string>
     <string name="password_mismatch">Passwords are not matching.</string>
     <string name="error_message">Oops!!! Something went wrong, Please try again later.</string>
+    <string name="email_mandatory">Please enter the email address</string>
+    <string name="email_sent_txt">Reset password email sent</string>
 </resources>
