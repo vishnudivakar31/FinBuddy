@@ -20,4 +20,12 @@
     <string name="error_message">Oops!!! Something went wrong, Please try again later.</string>
     <string name="email_mandatory">Please enter the email address</string>
     <string name="email_sent_txt">Reset password email sent</string>
+    <string name="sample_username">John Smith</string>
+    <string name="bill_txt">Add Bill</string>
+    <string name="shop_name_txt">Shop Name</string>
+    <string name="date_txt">Date</string>
+    <string name="total_txt">Total:</string>
+    <string name="sample_rate">110.00</string>
+    <string name="add_item_txt">Add Item</string>
+    <string name="save_txt">Save</string>
 </resources>
