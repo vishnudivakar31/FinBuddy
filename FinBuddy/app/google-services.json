@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "623694337067",
+    "firebase_url": "https://finbuddy-41709.firebaseio.com",
+    "project_id": "finbuddy-41709",
+    "storage_bucket": "finbuddy-41709.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623694337067:android:edbb6c9db648ee8b24466e",
+        "android_client_info": {
+          "package_name": "io.wanderingthinkter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623694337067-ibe6ekcqlpmn91qetojo9rke2u96aqrc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNMTsZMIcUrbd6lX85OIxgvhDXOjoH2Lw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623694337067-ibe6ekcqlpmn91qetojo9rke2u96aqrc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FinBuddy</string>
+    <string name="app_motto">Keep You Financially Safe and Sound</string>
+    <string name="email_txt">Email</string>
+    <string name="password_txt">Password</string>
+    <string name="login_txt">login</string>
+    <string name="create_account_txt">Create Account</string>
+    <string name="forgot_password">Forgot Password</string>
+</resources>
