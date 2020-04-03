@@ -69,6 +69,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 ActivityOptions options =
                         ActivityOptions.makeSceneTransitionAnimation(this);
                 startActivity(intent,options.toBundle());
+                finish();
                 break;
             case R.id.login_sign_in_button:
                 signInWithEmailAndPassword();

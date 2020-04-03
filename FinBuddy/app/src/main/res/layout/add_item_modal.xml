@@ -22,19 +22,19 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/add_item_name_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/name_txt"
-            android:inputType="textPersonName"
-            android:padding="8dp" />
+            <EditText
+                android:id="@+id/add_item_name_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/name_txt"
+                android:inputType="textPersonName"
+                android:padding="8dp" />
 
         <EditText
             android:id="@+id/add_item_qty_et"

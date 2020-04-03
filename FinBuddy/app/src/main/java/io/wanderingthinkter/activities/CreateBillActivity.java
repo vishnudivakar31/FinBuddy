@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.transition.Slide;
@@ -16,8 +18,17 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -30,20 +41,28 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.wanderingthinkter.R;
 import io.wanderingthinkter.models.BillItem;
+import io.wanderingthinkter.models.BillModel;
 import io.wanderingthinkter.models.CurrentUser;
 import io.wanderingthinkter.ui.BillItemRecyclerViewAdapter;
 
 import static android.view.Gravity.RIGHT;
+import static io.wanderingthinkter.util.Constants.BILL_COLLECTION;
 
 public class CreateBillActivity extends AppCompatActivity implements View.OnClickListener {
 
     private List<BillItem> billItemList;
-    private Button addItemButton;
+    private Button addItemButton, saveButton, cancelButton;
     private RecyclerView recyclerView;
     private BillItemRecyclerViewAdapter adapter;
     private TextView billTotal, itemCount;
     private TextView dateET;
-    private String billDate;
+    private EditText shopName;
+    private Timestamp billDate;
+    private ProgressBar progressBar;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference collectionReference = db.collection(BILL_COLLECTION);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +73,14 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         billItemList = new ArrayList<>();
 
         dateET = findViewById(R.id.create_bill_date);
+        cancelButton = findViewById(R.id.create_bill_cancel_button);
+        progressBar = findViewById(R.id.create_bill_progressbar);
+        shopName = findViewById(R.id.create_bill_shop_name);
         billTotal = findViewById(R.id.create_bill_total);
         itemCount = findViewById(R.id.create_bill_item_count);
         addItemButton = findViewById(R.id.create_bill_add_item);
         recyclerView = findViewById(R.id.create_bill_recycler_view);
+        saveButton = findViewById(R.id.create_bill_save_button);
         adapter = new BillItemRecyclerViewAdapter(CreateBillActivity.this, billItemList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -72,11 +95,10 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
 
         addItemButton.setOnClickListener(this);
         dateET.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
 
         init();
-
-        CurrentUser user = CurrentUser.getInstance();
-        Log.d("CurrUser", user.getUsername());
     }
 
     private void init() {
@@ -86,8 +108,8 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setDate(Date date) {
-        billDate = DateFormat.getDateInstance(DateFormat.LONG, Locale.US).format(date);
-        dateET.setText(billDate);
+        billDate = new Timestamp(date);
+        dateET.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.US).format(date));
     }
 
     private void updateBillItemCount() {
@@ -113,6 +135,58 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
             case R.id.create_bill_date:
                 setDateModal();
                 break;
+            case R.id.create_bill_save_button:
+                saveBill();
+                break;
+            case R.id.create_bill_cancel_button:
+                goToHomePage();
+                break;
+        }
+    }
+
+    private void goToHomePage() {
+        Intent intent = new Intent(CreateBillActivity.this, HomeActivity.class);
+
+        ActivityOptions options =
+                ActivityOptions.makeSceneTransitionAnimation(CreateBillActivity.this);
+        startActivity(intent,options.toBundle());
+        finish();
+    }
+
+    private void saveBill() {
+        String billTitle = shopName.getText().toString().trim();
+        Double total = Double.parseDouble(billTotal.getText().toString().trim());
+        Integer count = billItemList.size();
+
+        if(!TextUtils.isEmpty(billTitle) && billItemList != null &&billItemList.size() > 0) {
+            progressBar.setVisibility(View.VISIBLE);
+            BillModel billModel = new BillModel(billTitle,
+                    billDate,
+                    total,
+                    count,
+                    CurrentUser.getInstance().getUserId(),
+                    billItemList);
+
+            collectionReference
+                    .add(billModel)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            goToHomePage();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Snackbar.make(findViewById(R.id.create_bill_activity),
+                                    R.string.error_message, Snackbar.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
+        } else {
+            Snackbar.make(findViewById(R.id.create_bill_activity),
+                    R.string.all_fields_are_mandatory, Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -183,4 +257,6 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         billItemList.stream().forEach(item -> sum.set(sum.get() + item.getPrice()));
         billTotal.setText(decimalFormat.format(sum.get()));
     }
+
+    // TODO: Create auth listner for change of user.
 }
