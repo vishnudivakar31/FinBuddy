@@ -1,5 +1,6 @@
 package io.wanderingthinkter.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,13 +14,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.wanderingthinkter.R;
@@ -36,6 +42,8 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
     private RecyclerView recyclerView;
     private BillItemRecyclerViewAdapter adapter;
     private TextView billTotal, itemCount;
+    private TextView dateET;
+    private String billDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +53,7 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
 
         billItemList = new ArrayList<>();
 
+        dateET = findViewById(R.id.create_bill_date);
         billTotal = findViewById(R.id.create_bill_total);
         itemCount = findViewById(R.id.create_bill_item_count);
         addItemButton = findViewById(R.id.create_bill_add_item);
@@ -62,11 +71,23 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         recyclerView.setAdapter(adapter);
 
         addItemButton.setOnClickListener(this);
-        updateBillTotal();
-        updateBillItemCount();
+        dateET.setOnClickListener(this);
+
+        init();
 
         CurrentUser user = CurrentUser.getInstance();
         Log.d("CurrUser", user.getUsername());
+    }
+
+    private void init() {
+        updateBillTotal();
+        updateBillItemCount();
+        setDate(new Date());
+    }
+
+    private void setDate(Date date) {
+        billDate = DateFormat.getDateInstance(DateFormat.LONG, Locale.US).format(date);
+        dateET.setText(billDate);
     }
 
     private void updateBillItemCount() {
@@ -89,7 +110,30 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
             case R.id.create_bill_add_item:
                 addItem();
                 break;
+            case R.id.create_bill_date:
+                setDateModal();
+                break;
         }
+    }
+
+    private void setDateModal() {
+        View view = getLayoutInflater().inflate(R.layout.calendar_modal, null);
+        CalendarView calendarView = view.findViewById(R.id.calendar_modal_calendar);
+        AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateBillActivity.this);
+        builder.setView(view);
+        dialog = builder.create();
+        dialog.show();
+        calendarView.setMaxDate(System.currentTimeMillis());
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth);
+                setDate(calendar.getTime());
+                dialog.dismiss();
+            }
+        });
     }
 
     private void addItem() {
