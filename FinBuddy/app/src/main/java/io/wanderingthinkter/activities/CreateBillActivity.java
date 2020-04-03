@@ -1,6 +1,5 @@
 package io.wanderingthinkter.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
@@ -22,14 +20,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
@@ -53,8 +48,6 @@ import static io.wanderingthinkter.util.Constants.BILL_COLLECTION;
 public class CreateBillActivity extends AppCompatActivity implements View.OnClickListener {
 
     private List<BillItem> billItemList;
-    private Button addItemButton, saveButton, cancelButton;
-    private RecyclerView recyclerView;
     private BillItemRecyclerViewAdapter adapter;
     private TextView billTotal, itemCount;
     private TextView dateET;
@@ -67,7 +60,6 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser firebaseUser;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
 
     @Override
@@ -79,23 +71,20 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         billItemList = new ArrayList<>();
 
         dateET = findViewById(R.id.create_bill_date);
-        cancelButton = findViewById(R.id.create_bill_cancel_button);
+        Button cancelButton = findViewById(R.id.create_bill_cancel_button);
         progressBar = findViewById(R.id.create_bill_progressbar);
         shopName = findViewById(R.id.create_bill_shop_name);
         billTotal = findViewById(R.id.create_bill_total);
         itemCount = findViewById(R.id.create_bill_item_count);
-        addItemButton = findViewById(R.id.create_bill_add_item);
-        recyclerView = findViewById(R.id.create_bill_recycler_view);
-        saveButton = findViewById(R.id.create_bill_save_button);
+        Button addItemButton = findViewById(R.id.create_bill_add_item);
+        RecyclerView recyclerView = findViewById(R.id.create_bill_recycler_view);
+        Button saveButton = findViewById(R.id.create_bill_save_button);
         adapter = new BillItemRecyclerViewAdapter(CreateBillActivity.this, billItemList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter.setOnItemRemoved(new BillItemRecyclerViewAdapter.OnItemRemoved() {
-            @Override
-            public void itemRemovedEvent() {
-                updateBillItemCount();
-                updateBillTotal();
-            }
+        adapter.setOnItemRemoved(() -> {
+            updateBillItemCount();
+            updateBillTotal();
         });
         recyclerView.setAdapter(adapter);
 
@@ -104,12 +93,9 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseUser == null || firebaseUser != firebaseAuth.getCurrentUser()) {
-                    goToLoginPage();
-                }
+        FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
+            if (firebaseUser == null || firebaseUser != firebaseAuth.getCurrentUser()) {
+                goToLoginPage();
             }
         };
 
@@ -195,19 +181,11 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
 
             collectionReference
                     .add(billModel)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            goToHomePage();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Snackbar.make(findViewById(R.id.create_bill_activity),
-                                    R.string.error_message, Snackbar.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
+                    .addOnSuccessListener(documentReference -> goToHomePage())
+                    .addOnFailureListener(e -> {
+                        Snackbar.make(findViewById(R.id.create_bill_activity),
+                                R.string.error_message, Snackbar.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
                     });
 
         } else {
@@ -217,6 +195,7 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setDateModal() {
+        @SuppressLint("InflateParams")
         View view = getLayoutInflater().inflate(R.layout.calendar_modal, null);
         CalendarView calendarView = view.findViewById(R.id.calendar_modal_calendar);
         AlertDialog dialog;
@@ -225,18 +204,16 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         dialog = builder.create();
         dialog.show();
         calendarView.setMaxDate(System.currentTimeMillis());
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, dayOfMonth);
-                setDate(calendar.getTime());
-                dialog.dismiss();
-            }
+        calendarView.setOnDateChangeListener((calendarView1, year, month, dayOfMonth) -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, dayOfMonth);
+            setDate(calendar.getTime());
+            dialog.dismiss();
         });
     }
 
     private void addItem() {
+        @SuppressLint("InflateParams")
         final View view = getLayoutInflater().inflate(R.layout.add_item_modal, null);
         final EditText itemTitleEt = view.findViewById(R.id.add_item_name_et);
         final EditText itemQtyEt = view.findViewById(R.id.add_item_qty_et);
@@ -249,38 +226,30 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         dialog = builder.create();
         dialog.show();
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String itemTitle = itemTitleEt.getText().toString().trim();
-                String itemQty = itemQtyEt.getText().toString().trim();
-                String itemPrice = itemPriceEt.getText().toString().trim();
-                if(!TextUtils.isEmpty(itemTitle) && !TextUtils.isEmpty(itemQty) &&
-                        !TextUtils.isEmpty(itemPrice)) {
-                    BillItem billItem = new BillItem(itemTitle, Integer.parseInt(itemQty), Double.parseDouble(itemPrice));
-                    billItemList.add(billItem);
-                    adapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                    updateBillTotal();
-                    updateBillItemCount();
-                } else {
-                    Toast.makeText(CreateBillActivity.this, R.string.all_fields_are_mandatory, Toast.LENGTH_SHORT).show();
-                }
+        saveButton.setOnClickListener(buttonView -> {
+            String itemTitle = itemTitleEt.getText().toString().trim();
+            String itemQty = itemQtyEt.getText().toString().trim();
+            String itemPrice = itemPriceEt.getText().toString().trim();
+            if(!TextUtils.isEmpty(itemTitle) && !TextUtils.isEmpty(itemQty) &&
+                    !TextUtils.isEmpty(itemPrice)) {
+                BillItem billItem = new BillItem(itemTitle, Integer.parseInt(itemQty), Double.parseDouble(itemPrice));
+                billItemList.add(billItem);
+                adapter.notifyDataSetChanged();
+                dialog.dismiss();
+                updateBillTotal();
+                updateBillItemCount();
+            } else {
+                Toast.makeText(CreateBillActivity.this, R.string.all_fields_are_mandatory, Toast.LENGTH_SHORT).show();
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(buttonView -> dialog.dismiss());
     }
 
     private void updateBillTotal() {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         AtomicReference<Double> sum = new AtomicReference<>(0D);
-        billItemList.stream().forEach(item -> sum.set(sum.get() + item.getPrice()));
+        billItemList.forEach(item -> sum.set(sum.get() + item.getPrice()));
         billTotal.setText(decimalFormat.format(sum.get()));
     }
 
