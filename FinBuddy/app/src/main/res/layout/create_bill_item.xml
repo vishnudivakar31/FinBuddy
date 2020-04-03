@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
-    <androidx.cardview.widget.CardView
-        app:cardElevation="12dp"
-        app:cardUseCompatPadding="true"
-        app:cardCornerRadius="5dp"
-        android:padding="12dp"
+    <RelativeLayout
+        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp">
-
             <TextView
                 android:id="@+id/bill_item_serial_number"
                 android:layout_width="wrap_content"
@@ -31,6 +25,7 @@
 
             <TextView
                 android:id="@+id/bill_item_title"
+                android:layout_toRightOf="@+id/bill_item_serial_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -43,26 +38,33 @@
 
             <TextView
                 android:id="@+id/bill_item_qty"
+                android:layout_below="@+id/bill_item_title"
+                android:layout_toRightOf="@+id/bill_item_serial_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sample_bill_item_qty"
                 android:textSize="12sp"
                 android:textStyle="italic"
+                android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="@+id/bill_item_title"
                 app:layout_constraintTop_toBottomOf="@+id/bill_item_title" />
 
             <TextView
                 android:id="@+id/bill_item_price"
+                android:layout_below="@+id/bill_item_qty"
+                android:layout_toRightOf="@+id/bill_item_serial_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sample_bill_item_price"
                 android:textSize="12sp"
                 android:textStyle="italic"
+                android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="@+id/bill_item_qty"
                 app:layout_constraintTop_toBottomOf="@+id/bill_item_qty" />
 
             <ImageView
                 android:id="@+id/bill_item_delete_button"
+                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -71,6 +73,5 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_close_red" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

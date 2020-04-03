@@ -1,5 +1,6 @@
 package io.wanderingthinkter.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import io.wanderingthinkter.R;
@@ -19,6 +21,11 @@ public class BillItemRecyclerViewAdapter extends RecyclerView.Adapter<BillItemRe
 
     private Context context;
     private List<BillItem> billItemList;
+    private OnItemRemoved onItemRemoved;
+
+    public void setOnItemRemoved(OnItemRemoved onItemRemoved) {
+        this.onItemRemoved = onItemRemoved;
+    }
 
     public BillItemRecyclerViewAdapter(Context context, List<BillItem> billItemList) {
         this.context = context;
@@ -32,13 +39,15 @@ public class BillItemRecyclerViewAdapter extends RecyclerView.Adapter<BillItemRe
         return new ViewHolder(view);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         BillItem billItem = billItemList.get(position);
         holder.serialTV.setText(String.format("%d. ", position + 1));
         holder.titleTV.setText(billItem.getItemName());
-        holder.qtyTV.setText(String.valueOf(billItem.getQty()));
-        holder.priceTV.setText(String.valueOf(billItem.getPrice()));
+        holder.qtyTV.setText(String.format("%s%d", context.getString(R.string.qty_txt), billItem.getQty()));
+        holder.priceTV.setText(String.format("%s%s", context.getString(R.string.price_disp_txt), decimalFormat.format(billItem.getPrice())));
     }
 
     @Override
@@ -64,8 +73,13 @@ public class BillItemRecyclerViewAdapter extends RecyclerView.Adapter<BillItemRe
                     billItemList.remove(itemPosition);
                     notifyItemRemoved(itemPosition);
                     notifyItemRangeChanged(itemPosition, billItemList.size());
+                    onItemRemoved.itemRemovedEvent();
                 }
             });
         }
+    }
+
+    public interface OnItemRemoved {
+        void itemRemovedEvent();
     }
 }
