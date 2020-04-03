@@ -26,6 +26,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -63,6 +65,10 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference = db.collection(BILL_COLLECTION);
 
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseUser firebaseUser;
+    private FirebaseAuth.AuthStateListener authStateListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +104,27 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
 
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseUser == null || firebaseUser != firebaseAuth.getCurrentUser()) {
+                    goToLoginPage();
+                }
+            }
+        };
+
+        auth.addAuthStateListener(authStateListener);
+
         init();
+    }
+
+    private void goToLoginPage() {
+        Intent intent = new Intent(CreateBillActivity.this, LoginActivity.class);
+
+        ActivityOptions options =
+                ActivityOptions.makeSceneTransitionAnimation(CreateBillActivity.this);
+        startActivity(intent,options.toBundle());
+        finish();
     }
 
     private void init() {
@@ -258,5 +284,9 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         billTotal.setText(decimalFormat.format(sum.get()));
     }
 
-    // TODO: Create auth listner for change of user.
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseUser = auth.getCurrentUser();
+    }
 }
