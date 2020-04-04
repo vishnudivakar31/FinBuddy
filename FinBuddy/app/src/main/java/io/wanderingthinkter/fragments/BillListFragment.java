@@ -1,11 +1,17 @@
 package io.wanderingthinkter.fragments;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -39,12 +46,15 @@ import static io.wanderingthinkter.util.Constants.KEY_USER_ID;
 
 public class BillListFragment extends Fragment {
 
+    private static final String FROM_DATE = "from_date";
+    private static final String TO_DATE = "to_date";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference = db.collection(BILL_COLLECTION);
     private List<BillModel> billItemList;
     private Timestamp fromDate, toDate;
     private BillListRecyclerViewAdapter adapter;
     private TextView totalPrice, itemCount;
+    private TextView toDateTV, fromDateTV;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,8 +108,10 @@ public class BillListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bill_list, container, false);
 
-        TextView fromDateTV = view.findViewById(R.id.bill_list_fragment_from_date);
-        TextView toDateTV = view.findViewById(R.id.bill_list_fragment_to_date);
+        fromDateTV = view.findViewById(R.id.bill_list_fragment_from_date);
+        toDateTV = view.findViewById(R.id.bill_list_fragment_to_date);
+        ImageView fromDateIV = view.findViewById(R.id.bill_list_fragment_calendar_1);
+        ImageView toDateIV = view.findViewById(R.id.bill_list_fragment_calendar_2);
         RecyclerView recyclerView = view.findViewById(R.id.bill_list_fragment_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -117,10 +129,55 @@ public class BillListFragment extends Fragment {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         toDate = new Timestamp(new Date(System.currentTimeMillis()));
 
-        fromDateTV.setText(getDateText(fromDate));
-        toDateTV.setText(getDateText(toDate));
+        setFromAndToDate();
+
+        fromDateIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCalendarModal(FROM_DATE);
+            }
+        });
+
+        toDateIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCalendarModal(TO_DATE);
+            }
+        });
 
         return view;
+    }
+
+    private void setFromAndToDate() {
+        fromDateTV.setText(getDateText(fromDate));
+        toDateTV.setText(getDateText(toDate));
+    }
+
+    private void showCalendarModal(String dateType) {
+        AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View calendarModal = LayoutInflater.from(getActivity()).inflate(R.layout.calendar_modal, null);
+        CalendarView calendarView = calendarModal.findViewById(R.id.calendar_modal_calendar);
+        builder.setView(calendarModal);
+        dialog = builder.create();
+        dialog.show();
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth);
+                if(dateType.equals(FROM_DATE)) {
+                    fromDate = new Timestamp(calendar.getTime());
+                } else {
+                    toDate = new Timestamp(calendar.getTime());
+                }
+                billItemList.clear();
+                setFromAndToDate();
+                getBillItemsList(fromDate, toDate);
+                dialog.dismiss();
+            }
+        });
     }
 
     private String getDateText(Timestamp date) {
@@ -163,4 +220,5 @@ public class BillListFragment extends Fragment {
         billItemList.forEach(item -> sum.updateAndGet(v -> v + item.getTotalBill()));
         return sum.get();
     }
+
 }
