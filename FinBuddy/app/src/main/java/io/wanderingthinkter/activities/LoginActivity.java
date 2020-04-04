@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             currentUser.setUsername(userModel.getName());
                             currentUser.setUserId(userModel.getUserId());
                             Intent intent = new Intent(LoginActivity.this,
-                                    CreateBillActivity.class);
+                                    HomeActivity.class);
                             ActivityOptions options =
                                     ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this);
                             startActivity(intent,options.toBundle());

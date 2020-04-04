@@ -37,4 +37,11 @@
     <string name="qty_txt">Qty: </string>
     <string name="price_disp_txt">Price: </string>
     <string name="item_count_txt">"Item Count: "</string>
+    <string name="overview_txt">Overview</string>
+    <string name="browse_txt">Browse</string>
+    <string name="settings_txt">Settings</string>
+    <string name="list_view">List View</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

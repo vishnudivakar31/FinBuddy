@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="TabTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
     </style>
 
 
