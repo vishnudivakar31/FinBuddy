@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    app:cardUseCompatPadding="true"
+    app:cardElevation="2dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp"
+    android:id="@+id/bill_fragment_item"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/bill_fragment_item_title"
+            android:layout_width="match_parent"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_bill_item_title" />
+
+        <TextView
+            android:id="@+id/bill_fragment_item_date"
+            android:layout_alignTop="@id/bill_fragment_item_title"
+            android:layout_alignParentEnd="true"
+            android:text="@string/sample_date1_txt"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/bill_fragment_qty_title"
+            android:text="@string/item_count_txt"
+            android:textStyle="italic"
+            android:layout_below="@+id/bill_fragment_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/sample_bill_item_qty"
+            android:id="@+id/bill_fragment_qty"
+            android:layout_alignTop="@+id/bill_fragment_qty_title"
+            android:layout_toEndOf="@+id/bill_fragment_qty_title"
+            android:layout_width="wrap_content"
+            android:textStyle="italic"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/bill_fragment_price_title"
+            android:layout_below="@+id/bill_fragment_qty_title"
+            android:textStyle="italic"
+            android:text="@string/price_disp_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/sample_rate"
+            android:id="@+id/bill_fragment_price"
+            android:layout_alignTop="@+id/bill_fragment_price_title"
+            android:layout_toEndOf="@+id/bill_fragment_price_title"
+            android:layout_width="wrap_content"
+            android:textStyle="italic"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

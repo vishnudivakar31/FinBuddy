@@ -41,7 +41,8 @@
     <string name="browse_txt">Browse</string>
     <string name="settings_txt">Settings</string>
     <string name="list_view">List View</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="from_txt">From:</string>
+    <string name="sample_date_txt">April 1, 2020</string>
+    <string name="to_txt">To:</string>
+    <string name="sample_date1_txt">April 3, 2020</string>
 </resources>

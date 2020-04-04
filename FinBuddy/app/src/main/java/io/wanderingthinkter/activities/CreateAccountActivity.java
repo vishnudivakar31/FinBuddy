@@ -226,7 +226,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                                             user.setUserId(currentUser.getUid());
                                             user.setUsername(username);
                                             Intent intent = new Intent(CreateAccountActivity.this,
-                                                    CreateBillActivity.class);
+                                                    HomeActivity.class);
                                             ActivityOptions options =
                                                     ActivityOptions.makeSceneTransitionAnimation(CreateAccountActivity.this);
                                             startActivity(intent,options.toBundle());

@@ -37,6 +37,20 @@
             app:layout_constraintStart_toStartOf="@+id/homepage_app_name"
             app:layout_constraintTop_toBottomOf="@+id/homepage_app_name" />
 
+        <Button
+            android:id="@+id/homepage_add_item_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/ic_add_icon_white"
+            android:padding="4dp"
+            android:text="@string/add_item_txt"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.tabs.TabLayout

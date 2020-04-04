@@ -1,13 +1,17 @@
 package io.wanderingthinkter.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
+import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -30,6 +34,8 @@ public class HomeActivity extends AppCompatActivity {
             R.drawable.ic_browse_white,
             R.drawable.ic_settings_white
     };
+    private static final int CREATE_BILL_CODE = 1;
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +48,37 @@ public class HomeActivity extends AppCompatActivity {
                 getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.homepage_tab_layout);
+        tabLayout = findViewById(R.id.homepage_tab_layout);
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     tab.setText(tabTextList[position]);
                     tab.setIcon(tabIconList[position]);
                 })
                 .attach();
+
+        Button addItem = findViewById(R.id.homepage_add_item_button);
+        addItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this,
+                        CreateBillActivity.class);
+                ActivityOptions options =
+                        ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this);
+                startActivityForResult(intent, CREATE_BILL_CODE, options.toBundle());
+            }
+        });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == CREATE_BILL_CODE) {
+            TabLayout.Tab tab = tabLayout.getTabAt(tabLayout.getSelectedTabPosition());
+            tabLayout.selectTab(tab);
+        }
+    }
+
+    @SuppressLint("RtlHardcoded")
     public void setAnimation() {
         Slide slide = new Slide();
         slide.setSlideEdge(RIGHT);

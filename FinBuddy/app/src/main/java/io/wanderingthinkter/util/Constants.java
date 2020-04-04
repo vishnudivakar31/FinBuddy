@@ -5,4 +5,5 @@ public class Constants {
     public static final String IMAGE_STORAGE = "images";
     public static final String KEY_USER_ID = "userId";
     public static final String BILL_COLLECTION = "bills";
+    public static final String KEY_BILL_DATE = "billDate";
 }

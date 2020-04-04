@@ -157,11 +157,6 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void goToHomePage() {
-        Intent intent = new Intent(CreateBillActivity.this, HomeActivity.class);
-
-        ActivityOptions options =
-                ActivityOptions.makeSceneTransitionAnimation(CreateBillActivity.this);
-        startActivity(intent,options.toBundle());
         finish();
     }
 
