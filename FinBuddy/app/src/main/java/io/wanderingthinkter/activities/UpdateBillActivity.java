@@ -13,14 +13,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
@@ -111,12 +108,13 @@ public class UpdateBillActivity extends AppCompatActivity implements View.OnClic
                         billTitle.setText(model.getBillName());
                         billCategory.setText(model.getCategory());
                         billDate.setText(df.format(model.getBillDate().toDate()));
+                        billTimestamp = model.getBillDate();
                         setTotalPriceAndCount();
                         recyclerView = findViewById(R.id.update_bill_recycler_view);
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(this));
                         adapter = new BillItemRecyclerViewAdapter(UpdateBillActivity.this, model.getItems());
-                        adapter.setOnItemRemoved(() -> setTotalPriceAndCount());
+                        adapter.setOnItemRemoved(this::setTotalPriceAndCount);
                         recyclerView.setAdapter(adapter);
                         // TODO: Set adapter
                     }
@@ -197,23 +195,16 @@ public class UpdateBillActivity extends AppCompatActivity implements View.OnClic
             model.setCategory(category);
             model.setItemCount(count);
             model.setBillDate(billTimestamp);
+            model.setTotalBill(total);
 
             collectionReference
                     .document(documentID)
                     .set(model)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            finish();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Snackbar.make(findViewById(R.id.create_bill_activity),
-                                    R.string.error_message, Snackbar.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
+                    .addOnSuccessListener(aVoid -> finish())
+                    .addOnFailureListener(e -> {
+                        Snackbar.make(findViewById(R.id.create_bill_activity),
+                                R.string.error_message, Snackbar.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
                     });
         } else {
             Snackbar.make(findViewById(R.id.create_bill_activity),
