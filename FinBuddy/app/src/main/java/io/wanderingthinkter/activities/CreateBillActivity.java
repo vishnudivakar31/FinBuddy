@@ -51,7 +51,7 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
     private BillItemRecyclerViewAdapter adapter;
     private TextView billTotal, itemCount;
     private TextView dateET;
-    private EditText shopName;
+    private EditText shopName, categoryName;
     private Timestamp billDate;
     private ProgressBar progressBar;
 
@@ -76,6 +76,7 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
         shopName = findViewById(R.id.create_bill_shop_name);
         billTotal = findViewById(R.id.create_bill_total);
         itemCount = findViewById(R.id.create_bill_item_count);
+        categoryName = findViewById(R.id.create_bill_catergory);
         Button addItemButton = findViewById(R.id.create_bill_add_item);
         RecyclerView recyclerView = findViewById(R.id.create_bill_recycler_view);
         Button saveButton = findViewById(R.id.create_bill_save_button);
@@ -162,6 +163,7 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
 
     private void saveBill() {
         String billTitle = shopName.getText().toString().trim();
+        String category = categoryName.getText().toString().trim().toLowerCase();
         Double total = Double.parseDouble(billTotal.getText().toString().trim());
         Integer count = billItemList.size();
 
@@ -172,6 +174,7 @@ public class CreateBillActivity extends AppCompatActivity implements View.OnClic
                     total,
                     count,
                     CurrentUser.getInstance().getUserId(),
+                    category,
                     billItemList);
 
             collectionReference

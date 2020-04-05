@@ -1,13 +1,7 @@
 package io.wanderingthinkter.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -23,21 +17,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
@@ -139,12 +130,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         view.findViewById(R.id.image_capture_camera).setOnClickListener(this);
         view.findViewById(R.id.image_capture_gallery).setOnClickListener(this);
         dialogBuilder.setView(view)
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.dismiss());
         alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
@@ -177,31 +163,15 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     .child(IMAGE_STORAGE)
                     .child("my_image_" + Timestamp.now().getNanoseconds());
             filePath.putFile(Uri.parse(imageUrl))
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    createAccountWithEmailAndPassword(username, email,
-                                            password, uri.toString());
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    showSnackBar(R.string.error_message);
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            showSnackBar(R.string.error_message);
-                            progressBar.setVisibility(View.GONE);
-                        }
+                    .addOnSuccessListener(taskSnapshot -> filePath.getDownloadUrl().addOnSuccessListener(uri -> createAccountWithEmailAndPassword(username, email,
+                            password, uri.toString()))
+                    .addOnFailureListener(e -> {
+                        showSnackBar(R.string.error_message);
+                        progressBar.setVisibility(View.GONE);
+                    }))
+                    .addOnFailureListener(e -> {
+                        showSnackBar(R.string.error_message);
+                        progressBar.setVisibility(View.GONE);
                     });
         }
     }
@@ -210,49 +180,37 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         progressBar.setVisibility(View.VISIBLE);
         final UserModel userModel = new UserModel(username, email, imageUrl, Timestamp.now());
         auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
-                            currentUser = auth.getCurrentUser();
-                            assert currentUser != null;
-                            userModel.setUserId(currentUser.getUid());
-                            collectionReference
-                                    .add(userModel)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                        @Override
-                                        public void onSuccess(DocumentReference documentReference) {
-                                            CurrentUser user = CurrentUser.getInstance();
-                                            user.setUserId(currentUser.getUid());
-                                            user.setUsername(username);
-                                            Intent intent = new Intent(CreateAccountActivity.this,
-                                                    HomeActivity.class);
-                                            ActivityOptions options =
-                                                    ActivityOptions.makeSceneTransitionAnimation(CreateAccountActivity.this);
-                                            startActivity(intent,options.toBundle());
-                                            progressBar.setVisibility(View.GONE);
-                                            finish();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            showSnackBar(R.string.error_message);
-                                            progressBar.setVisibility(View.GONE);
-                                        }
-                                    });
-                        } else {
-                            showSnackBar(R.string.error_message);
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        currentUser = auth.getCurrentUser();
+                        assert currentUser != null;
+                        userModel.setUserId(currentUser.getUid());
+                        collectionReference
+                                .add(userModel)
+                                .addOnSuccessListener(documentReference -> {
+                                    CurrentUser user = CurrentUser.getInstance();
+                                    user.setUserId(currentUser.getUid());
+                                    user.setUsername(username);
+                                    Intent intent = new Intent(CreateAccountActivity.this,
+                                            HomeActivity.class);
+                                    ActivityOptions options =
+                                            ActivityOptions.makeSceneTransitionAnimation(CreateAccountActivity.this);
+                                    startActivity(intent,options.toBundle());
+                                    progressBar.setVisibility(View.GONE);
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    showSnackBar(R.string.error_message);
+                                    progressBar.setVisibility(View.GONE);
+                                });
+                    } else {
                         showSnackBar(R.string.error_message);
                         progressBar.setVisibility(View.GONE);
                     }
+                })
+                .addOnFailureListener(e -> {
+                    showSnackBar(R.string.error_message);
+                    progressBar.setVisibility(View.GONE);
                 });
     }
 

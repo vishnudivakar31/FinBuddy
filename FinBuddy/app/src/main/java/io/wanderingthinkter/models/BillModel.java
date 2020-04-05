@@ -11,17 +11,19 @@ public class BillModel {
     private Double totalBill;
     private Integer itemCount;
     private String userId;
+    private String category;
     private List<BillItem> items;
 
     public BillModel() {
     }
 
-    public BillModel(String billName, Timestamp billDate, Double totalBill, Integer itemCount, String userId, List<BillItem> items) {
+    public BillModel(String billName, Timestamp billDate, Double totalBill, Integer itemCount, String userId, String category, List<BillItem> items) {
         this.billName = billName;
         this.billDate = billDate;
         this.totalBill = totalBill;
         this.itemCount = itemCount;
         this.userId = userId;
+        this.category = category;
         this.items = items;
         this.id = String.valueOf(System.currentTimeMillis());
     }
@@ -80,5 +82,13 @@ public class BillModel {
 
     public void setItems(List<BillItem> items) {
         this.items = items;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

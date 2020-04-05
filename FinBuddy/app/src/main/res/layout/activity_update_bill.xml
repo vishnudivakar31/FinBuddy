@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.CreateBillActivity">
+    tools:context=".activities.UpdateBillActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:padding="8dp">
 
         <TextView
-            android:id="@+id/create_bil_app_name"
+            android:id="@+id/update_bil_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -28,18 +28,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/create_bill_app_motto"
+            android:id="@+id/update_bill_app_motto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/almendra_italic"
             android:text="@string/app_motto"
             android:textColor="@color/common_google_signin_btn_text_dark_default"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/create_bil_app_name"
-            app:layout_constraintTop_toBottomOf="@+id/create_bil_app_name" />
+            app:layout_constraintStart_toStartOf="@+id/update_bil_app_name"
+            app:layout_constraintTop_toBottomOf="@+id/update_bil_app_name" />
 
         <Button
-            android:id="@+id/create_bill_cancel_button"
+            android:id="@+id/update_bill_cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -68,13 +68,13 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/create_bill_title"
+                    android:id="@+id/update_bill_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="@string/bill_txt"
+                    android:text="@string/update_bill"
                     android:textColor="@color/common_google_signin_btn_text_dark_default"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -84,7 +84,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ProgressBar
-                    android:id="@+id/create_bill_progressbar"
+                    android:id="@+id/update_bill_progressbar"
                     style="?android:attr/progressBarStyle"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -93,11 +93,11 @@
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/create_bill_title" />
+                    app:layout_constraintTop_toTopOf="@+id/update_bill_title" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <EditText
-                android:id="@+id/create_bill_shop_name"
+                android:id="@+id/update_bill_shop_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -112,7 +112,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/create_bill_catergory"
+                android:id="@+id/update_bill_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -127,7 +127,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/create_bill_date"
+                android:id="@+id/update_bill_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -177,7 +177,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/create_bill_total"
+                    android:id="@+id/update_bill_total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -189,7 +189,7 @@
                     app:layout_constraintTop_toTopOf="@+id/textView5" />
 
                 <Button
-                    android:id="@+id/create_bill_add_item"
+                    android:id="@+id/update_bill_add_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -200,37 +200,37 @@
                     android:text="@string/add_item_txt"
                     android:textColor="@color/common_google_signin_btn_text_dark_default"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/create_bill_save_button"
+                    app:layout_constraintEnd_toStartOf="@+id/update_bill_save_button"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/create_bill_save_button"
+                    android:id="@+id/update_bill_save_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:background="@android:color/transparent"
                     android:drawableStart="@drawable/ic_save_white"
                     android:padding="8dp"
-                    android:text="@string/save_txt"
+                    android:text="@string/update_txt"
                     android:textColor="@color/common_google_signin_btn_text_dark_default"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/create_bill_item_count"
+                    android:id="@+id/update_bill_item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="Items: 10"
                     android:textColor="@color/common_google_signin_btn_text_dark_default"
                     android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="@+id/create_bill_save_button"
-                    app:layout_constraintTop_toBottomOf="@+id/create_bill_save_button" />
+                    app:layout_constraintEnd_toEndOf="@+id/update_bill_save_button"
+                    app:layout_constraintTop_toBottomOf="@+id/update_bill_save_button" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/create_bill_recycler_view"
+                android:id="@+id/update_bill_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"

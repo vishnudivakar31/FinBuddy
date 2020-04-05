@@ -1,17 +1,15 @@
 package io.wanderingthinkter.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -117,7 +114,7 @@ public class BillListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         totalPrice = view.findViewById(R.id.bill_list_fragment_total);
         itemCount = view.findViewById(R.id.bill_list_fragment_item_count);
-        adapter = new BillListRecyclerViewAdapter(getContext(), billItemList);
+        adapter = new BillListRecyclerViewAdapter(billItemList);
         recyclerView.setAdapter(adapter);
 
         Calendar calendar = Calendar.getInstance();
@@ -131,19 +128,9 @@ public class BillListFragment extends Fragment {
 
         setFromAndToDate();
 
-        fromDateIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCalendarModal(FROM_DATE);
-            }
-        });
+        fromDateIV.setOnClickListener(view1 -> showCalendarModal(FROM_DATE));
 
-        toDateIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCalendarModal(TO_DATE);
-            }
-        });
+        toDateIV.setOnClickListener(view12 -> showCalendarModal(TO_DATE));
 
         return view;
     }
@@ -156,27 +143,25 @@ public class BillListFragment extends Fragment {
     private void showCalendarModal(String dateType) {
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View calendarModal = LayoutInflater.from(getActivity()).inflate(R.layout.calendar_modal, null);
+        @SuppressLint("InflateParams") View calendarModal = LayoutInflater.from(getActivity()).inflate(R.layout.calendar_modal, null);
         CalendarView calendarView = calendarModal.findViewById(R.id.calendar_modal_calendar);
+        calendarView.setMaxDate(System.currentTimeMillis());
         builder.setView(calendarModal);
         dialog = builder.create();
         dialog.show();
 
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, dayOfMonth);
-                if(dateType.equals(FROM_DATE)) {
-                    fromDate = new Timestamp(calendar.getTime());
-                } else {
-                    toDate = new Timestamp(calendar.getTime());
-                }
-                billItemList.clear();
-                setFromAndToDate();
-                getBillItemsList(fromDate, toDate);
-                dialog.dismiss();
+        calendarView.setOnDateChangeListener((calendarView1, year, month, dayOfMonth) -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, dayOfMonth);
+            if(dateType.equals(FROM_DATE)) {
+                fromDate = new Timestamp(calendar.getTime());
+            } else {
+                toDate = new Timestamp(calendar.getTime());
             }
+            billItemList.clear();
+            setFromAndToDate();
+            getBillItemsList(fromDate, toDate);
+            dialog.dismiss();
         });
     }
 

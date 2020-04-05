@@ -1,9 +1,5 @@
 package io.wanderingthinkter.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,18 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import io.wanderingthinkter.R;
 import io.wanderingthinkter.models.CurrentUser;
@@ -85,16 +77,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(!TextUtils.isEmpty(email)) {
             progressBar.setVisibility(View.VISIBLE);
             auth.sendPasswordResetEmail(email)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
-                                showSnackBar(R.string.email_sent_txt);
-                            } else {
-                                showSnackBar(R.string.error_message);
-                            }
-                            progressBar.setVisibility(View.GONE);
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()) {
+                            showSnackBar(R.string.email_sent_txt);
+                        } else {
+                            showSnackBar(R.string.error_message);
                         }
+                        progressBar.setVisibility(View.GONE);
                     });
         } else {
             showSnackBar(R.string.email_mandatory);
@@ -107,17 +96,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             progressBar.setVisibility(View.VISIBLE);
             auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()) {
-                                firebaseUser = auth.getCurrentUser();
-                                assert firebaseUser != null;
-                                setCurrentUserAndView(firebaseUser.getUid());
-                            } else {
-                                progressBar.setVisibility(View.GONE);
-                                showSnackBar(R.string.error_message);
-                            }
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()) {
+                            firebaseUser = auth.getCurrentUser();
+                            assert firebaseUser != null;
+                            setCurrentUserAndView(firebaseUser.getUid());
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            showSnackBar(R.string.error_message);
                         }
                     });
         } else {
@@ -142,24 +128,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void setCurrentUserAndView(String userId) {
         collectionReference
                 .whereEqualTo(KEY_USER_ID, userId)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        assert queryDocumentSnapshots != null;
-                        for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            UserModel userModel = snapshot.toObject(UserModel.class);
-                            CurrentUser currentUser = CurrentUser.getInstance();
-                            currentUser.setUsername(userModel.getName());
-                            currentUser.setUserId(userModel.getUserId());
-                            Intent intent = new Intent(LoginActivity.this,
-                                    HomeActivity.class);
-                            ActivityOptions options =
-                                    ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this);
-                            startActivity(intent,options.toBundle());
-                            progressBar.setVisibility(View.GONE);
-                            finish();
-                        }
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    assert queryDocumentSnapshots != null;
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        UserModel userModel = snapshot.toObject(UserModel.class);
+                        CurrentUser currentUser = CurrentUser.getInstance();
+                        currentUser.setUsername(userModel.getName());
+                        currentUser.setUserId(userModel.getUserId());
+                        Intent intent = new Intent(LoginActivity.this,
+                                HomeActivity.class);
+                        ActivityOptions options =
+                                ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this);
+                        startActivity(intent,options.toBundle());
+                        progressBar.setVisibility(View.GONE);
+                        finish();
                     }
                 });
     }

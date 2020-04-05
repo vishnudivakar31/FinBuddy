@@ -35,7 +35,7 @@ public class BillItemRecyclerViewAdapter extends RecyclerView.Adapter<BillItemRe
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_bill_item, null);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_bill_item, null);
         return new ViewHolder(view);
     }
 
@@ -55,26 +55,23 @@ public class BillItemRecyclerViewAdapter extends RecyclerView.Adapter<BillItemRe
         return billItemList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView serialTV, titleTV, qtyTV, priceTV;
-        public ImageView deleteItem;
-        public ViewHolder(@NonNull View itemView) {
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView serialTV, titleTV, qtyTV, priceTV;
+        ImageView deleteItem;
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             serialTV = itemView.findViewById(R.id.bill_item_serial_number);
             titleTV = itemView.findViewById(R.id.bill_item_title);
             qtyTV = itemView.findViewById(R.id.bill_item_qty);
             priceTV = itemView.findViewById(R.id.bill_item_price);
             deleteItem = itemView.findViewById(R.id.bill_item_delete_button);
-            deleteItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // TODO: Delete item
-                    int itemPosition = getAdapterPosition();
-                    billItemList.remove(itemPosition);
-                    notifyItemRemoved(itemPosition);
-                    notifyItemRangeChanged(itemPosition, billItemList.size());
-                    onItemRemoved.itemRemovedEvent();
-                }
+            deleteItem.setOnClickListener(view -> {
+                // TODO: Delete item
+                int itemPosition = getAdapterPosition();
+                billItemList.remove(itemPosition);
+                notifyItemRemoved(itemPosition);
+                notifyItemRangeChanged(itemPosition, billItemList.size());
+                onItemRemoved.itemRemovedEvent();
             });
         }
     }

@@ -9,7 +9,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
-import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 
@@ -57,15 +56,12 @@ public class HomeActivity extends AppCompatActivity {
                 .attach();
 
         Button addItem = findViewById(R.id.homepage_add_item_button);
-        addItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this,
-                        CreateBillActivity.class);
-                ActivityOptions options =
-                        ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this);
-                startActivityForResult(intent, CREATE_BILL_CODE, options.toBundle());
-            }
+        addItem.setOnClickListener(view -> {
+            Intent intent = new Intent(HomeActivity.this,
+                    CreateBillActivity.class);
+            ActivityOptions options =
+                    ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this);
+            startActivityForResult(intent, CREATE_BILL_CODE, options.toBundle());
         });
     }
 

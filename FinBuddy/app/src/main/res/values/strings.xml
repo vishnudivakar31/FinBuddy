@@ -45,4 +45,8 @@
     <string name="sample_date_txt">April 1, 2020</string>
     <string name="to_txt">To:</string>
     <string name="sample_date1_txt">April 3, 2020</string>
+    <string name="category_txt">Category</string>
+    <string name="category_txt_with_colon">Category:</string>
+    <string name="update_bill">Update Bill</string>
+    <string name="update_txt">Update</string>
 </resources>
