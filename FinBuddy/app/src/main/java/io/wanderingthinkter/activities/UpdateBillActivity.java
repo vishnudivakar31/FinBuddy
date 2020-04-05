@@ -13,11 +13,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
@@ -77,9 +80,11 @@ public class UpdateBillActivity extends AppCompatActivity implements View.OnClic
         Button cancelButton = findViewById(R.id.update_bill_cancel_button);
         Button addItem = findViewById(R.id.update_bill_add_item);
         Button updateButton = findViewById(R.id.update_bill_save_button);
+        Button deleteButton = findViewById(R.id.update_bill_delete_button);
         cancelButton.setOnClickListener(this);
         addItem.setOnClickListener(this);
         updateButton.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
         billDate.setOnClickListener(this);
     }
 
@@ -148,7 +153,23 @@ public class UpdateBillActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.update_bill_date:
                 setDateModal();
+                break;
+            case R.id.update_bill_delete_button:
+                deleteModel();
         }
+    }
+
+    private void deleteModel() {
+        progressBar.setVisibility(View.VISIBLE);
+        collectionReference
+                .document(documentID)
+                .delete()
+                .addOnSuccessListener(aVoid -> finish())
+                .addOnFailureListener(e -> {
+                    Snackbar.make(findViewById(R.id.create_bill_activity),
+                            R.string.error_message, Snackbar.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                });
     }
 
     private void addItem() {

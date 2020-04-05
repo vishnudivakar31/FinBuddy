@@ -141,6 +141,15 @@
                 android:hint="@string/date_txt"
                 android:inputType="date"
                 android:textSize="16sp" />
+
+            <Button
+                android:layout_margin="8dp"
+                android:id="@+id/update_bill_delete_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/transparent_button_with_border"
+                android:text="@string/delete_txt"
+                android:textColor="@color/design_default_color_error" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
