@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/bill_list_fragment_from"
+            android:id="@+id/overview_fragment_from_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/from_txt"
@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <TextView
-            android:id="@+id/bill_list_fragment_from_date"
+            android:id="@+id/overview_fragment_from_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -51,11 +51,11 @@
             android:textColor="@color/common_google_signin_btn_text_dark_default"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bill_list_fragment_from"
+            app:layout_constraintStart_toEndOf="@+id/overview_fragment_from_txt"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <TextView
-            android:id="@+id/bill_list_fragment_to_date"
+            android:id="@+id/overview_fragment_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
@@ -67,14 +67,14 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <TextView
-            android:id="@+id/bill_list_fragment_to"
+            android:id="@+id/overview_fragment_to_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="@string/to_txt"
             android:textColor="@color/common_google_signin_btn_text_dark_default"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/bill_list_fragment_to_date"
+            app:layout_constraintEnd_toStartOf="@+id/overview_fragment_to"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <TextView
@@ -95,7 +95,7 @@
             android:layout_marginStart="4dp"
             android:src="@drawable/ic_calendar_white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bill_list_fragment_from_date"
+            app:layout_constraintStart_toEndOf="@+id/overview_fragment_from_date"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <ImageView
@@ -126,7 +126,7 @@
             android:text="@string/item_count_txt"
             android:textColor="@color/common_google_signin_btn_text_dark_default"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/bill_list_fragment_to"
+            app:layout_constraintStart_toStartOf="@+id/overview_fragment_to_txt"
             app:layout_constraintTop_toTopOf="@+id/textView3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

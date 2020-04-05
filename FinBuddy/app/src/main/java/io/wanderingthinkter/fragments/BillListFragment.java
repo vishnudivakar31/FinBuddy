@@ -105,8 +105,8 @@ public class BillListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bill_list, container, false);
 
-        fromDateTV = view.findViewById(R.id.bill_list_fragment_from_date);
-        toDateTV = view.findViewById(R.id.bill_list_fragment_to_date);
+        fromDateTV = view.findViewById(R.id.overview_fragment_from_date);
+        toDateTV = view.findViewById(R.id.overview_fragment_to);
         ImageView fromDateIV = view.findViewById(R.id.bill_list_fragment_calendar_1);
         ImageView toDateIV = view.findViewById(R.id.bill_list_fragment_calendar_2);
         RecyclerView recyclerView = view.findViewById(R.id.bill_list_fragment_recyclerview);

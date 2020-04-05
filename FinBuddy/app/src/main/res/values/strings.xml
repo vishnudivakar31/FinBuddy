@@ -50,4 +50,7 @@
     <string name="update_bill">Update Bill</string>
     <string name="update_txt">Update</string>
     <string name="delete_txt">Delete</string>
+    <string name="total_expense_distribution_txt">Total expense distribution</string>
+    <string name="expense_distribution_txt">Expense Distribution</string>
+    <string name="category_distribution_txt">Distribution by category</string>
 </resources>
