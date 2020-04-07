@@ -76,7 +76,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                             for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                                 userModel = snapshot.toObject(UserModel.class);
                                 userName.setText(userModel.getName());
-                                Picasso.get().load(userModel.getProfilePic()).into(profilePicture);
+                                if(userModel.getProfilePic() != null)
+                                    Picasso.get().load(userModel.getProfilePic()).into(profilePicture);
                             }
                         }
                     }
