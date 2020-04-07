@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.List;
 
-public class BillModel {
+public class BillModel implements Comparable<BillModel> {
     private String id;
     private String billName;
     private Timestamp billDate;
@@ -90,5 +90,11 @@ public class BillModel {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+
+    @Override
+    public int compareTo(BillModel billModel) {
+        return totalBill.compareTo(billModel.getTotalBill());
     }
 }

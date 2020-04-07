@@ -53,4 +53,7 @@
     <string name="total_expense_distribution_txt">Total expense distribution</string>
     <string name="expense_distribution_txt">Expense Distribution</string>
     <string name="category_distribution_txt">Distribution by category</string>
+    <string name="top_expenses_txt">Top 5 Expenses</string>
+    <string name="expense_category_distribution_txt">Expense Category Distribution</string>
+    <string name="sample_category">Electronics</string>
 </resources>

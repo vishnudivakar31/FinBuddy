@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +50,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.wanderingthinkter.R;
 import io.wanderingthinkter.models.BillModel;
 import io.wanderingthinkter.models.CurrentUser;
+import io.wanderingthinkter.ui.OverviewRecyclerAdapter;
 
 import static io.wanderingthinkter.util.Constants.BILL_COLLECTION;
 import static io.wanderingthinkter.util.Constants.KEY_BILL_DATE;
@@ -62,7 +66,9 @@ public class OverviewFragment extends Fragment {
     private TextView itemCount, totalPrice, fromDateTV, toDateTV;
     private Timestamp fromDate, toDate;
     private PieChart pieChart;
-    private BarChart barChart;
+    private OverviewRecyclerAdapter adapter;
+    private List<BillModel> topFiveExpenses;
+    public  RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,16 +78,18 @@ public class OverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         billItemList = new ArrayList<>();
+        topFiveExpenses = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_overview_fragment, container, false);
+        recyclerView = view.findViewById(R.id.overview_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         itemCount = view.findViewById(R.id.overview_total_count);
         totalPrice = view.findViewById(R.id.overview_total);
         fromDateTV = view.findViewById(R.id.overview_fragment_from_date);
         toDateTV = view.findViewById(R.id.overview_fragment_to_date);
         pieChart = view.findViewById(R.id.overview_pie_chart);
-        barChart = view.findViewById(R.id.overview_bar_chart);
-        toDate = new Timestamp(new Date());
+        toDate = new Timestamp(new Date(System.currentTimeMillis()));
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR, 0);
@@ -96,6 +104,7 @@ public class OverviewFragment extends Fragment {
 
         toDateIV.setOnClickListener(view12 -> showCalendarModal(TO_DATE));
 
+        setFromAndToDate();
         return view;
     }
 
@@ -154,21 +163,29 @@ public class OverviewFragment extends Fragment {
                             BillModel billModel = snapshot.toObject(BillModel.class);
                             billItemList.add(billModel);
                         }
+                        Collections.sort(billItemList, Collections.reverseOrder());
                         DecimalFormat df = new DecimalFormat("0.00");
                         itemCount.setText(String.valueOf(billItemList.size()));
                         totalPrice.setText(String.valueOf(df.format(getTotalPrice(billItemList))));
                         setPieBarChart();
+                        setTopFiveExpense();
                     }
                 })
                 .addOnFailureListener(e -> Snackbar.make(Objects.requireNonNull(getView()).findViewById(R.id.bill_overview_fragment),
                         R.string.error_message, Snackbar.LENGTH_SHORT).show());
     }
 
+    private void setTopFiveExpense() {
+        int size = billItemList.size() >= 5 ? 5 : billItemList.size();
+        topFiveExpenses = billItemList.subList(0, size);
+        adapter = new OverviewRecyclerAdapter(topFiveExpenses);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
     private void setPieBarChart() {
         Map<String, Float> categoryDistribution = new HashMap<>();
-        Map<String, Float> expenseDistribution = new HashMap<>();
         for(BillModel billModel : billItemList) {
-            expenseDistribution.put(billModel.getBillName(), Float.parseFloat(String.valueOf(billModel.getTotalBill())));
             String category = billModel.getCategory().toLowerCase();
             if(categoryDistribution.containsKey(category)) {
                 Float currentPrice = categoryDistribution.get(category);
@@ -179,26 +196,6 @@ public class OverviewFragment extends Fragment {
             }
         }
         setPieChart(categoryDistribution);
-        setBarChart(expenseDistribution);
-    }
-
-    private void setBarChart(Map<String, Float> expenseDistribution) {
-        List<BarEntry> distribution = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
-        int i = 0;
-        for(Map.Entry<String, Float> entry : expenseDistribution.entrySet()) {
-            distribution.add(new BarEntry(i, entry.getValue()));
-            labels.add(entry.getKey());
-            i += 1;
-        }
-        BarDataSet dataSet = new BarDataSet(distribution, getString(R.string.expense_distribution_txt));
-        BarData data = new BarData(dataSet);
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        barChart.setFitBars(true);
-        barChart.setDrawValueAboveBar(true);
-        barChart.setData(data);
-        barChart.animateXY(2000, 2000);
-
     }
 
     private void setPieChart(Map<String, Float> categoryDistribution) {

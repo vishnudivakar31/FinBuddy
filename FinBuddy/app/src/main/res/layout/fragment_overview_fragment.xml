@@ -10,10 +10,17 @@
     tools:context=".fragments.OverviewFragment">
 
     <LinearLayout
+        android:padding="8dp"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical">
+
+        <TextView
+            android:text="@string/expense_category_distribution_txt"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:layout_weight="0.7"
@@ -22,17 +29,27 @@
             android:layout_height="match_parent"
             android:layout_margin="8dp" />
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:layout_margin="8dp"
-            android:id="@+id/overview_bar_chart"
+        <LinearLayout
+            android:padding="8dp"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/top_expenses_txt"
+                android:textStyle="bold" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/overview_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
-        app:cardElevation="8dp"
+        app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="5dp"
         android:layout_width="match_parent"
@@ -43,11 +60,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="4dp">
 
             <RelativeLayout
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
@@ -68,7 +85,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
