@@ -3,11 +3,6 @@ package io.wanderingthinkter.fragments;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +10,14 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
@@ -66,9 +58,8 @@ public class OverviewFragment extends Fragment {
     private TextView itemCount, totalPrice, fromDateTV, toDateTV;
     private Timestamp fromDate, toDate;
     private PieChart pieChart;
-    private OverviewRecyclerAdapter adapter;
     private List<BillModel> topFiveExpenses;
-    public  RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,9 +167,9 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setTopFiveExpense() {
-        int size = billItemList.size() >= 5 ? 5 : billItemList.size();
+        int size = Math.min(billItemList.size(), 5);
         topFiveExpenses = billItemList.subList(0, size);
-        adapter = new OverviewRecyclerAdapter(topFiveExpenses);
+        OverviewRecyclerAdapter adapter = new OverviewRecyclerAdapter(topFiveExpenses);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
