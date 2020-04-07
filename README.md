@@ -4,7 +4,7 @@ monitor the spending pattern.
 
 ### Product Walkthrough:
   - First the user has to **Login or Create an account**.
-    ![Login Screen](https://github.com/vishnudivakar31/FinBuddy/blob/master/FinBuddy/App%20Screenshots/LoginPage.jpg){:height="50%" width="50%"}
+    ![Login Screen](https://github.com/vishnudivakar31/FinBuddy/blob/master/FinBuddy/App%20Screenshots/LoginPage.jpg?s=200)
   - **Account creation**:
     - User has to add Name, email and password. Users can optionally add a profile picture.
     ![Create Account Page](https://github.com/vishnudivakar31/FinBuddy/blob/master/FinBuddy/App%20Screenshots/CreateAccount.jpg)
