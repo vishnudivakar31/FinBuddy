@@ -56,4 +56,6 @@
     <string name="top_expenses_txt">Top 5 Expenses</string>
     <string name="expense_category_distribution_txt">Expense Category Distribution</string>
     <string name="sample_category">Electronics</string>
+    <string name="change_password_txt">Change Password</string>
+    <string name="sign_out_txt">Sign Out</string>
 </resources>
