@@ -17,10 +17,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="@string/expense_category_distribution_txt"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/expense_category_distribution_txt"
+            android:textStyle="bold" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:layout_weight="0.7"
