@@ -3,12 +3,12 @@ FinBuddy is a android application to help users keep count on their expense and
 monitor the spending pattern.
 
 ### Product Walkthrough:
-  - First the user has to *Login or Create an account*.
-    ![Login Screen](https://github.com/vishnudivakar31/FinBuddy/blob/master/FinBuddy/App%20Screenshots/LoginPage.jpg)
-  - *Account creation*:
+  - First the user has to **Login or Create an account**.
+    ![Login Screen](https://github.com/vishnudivakar31/FinBuddy/blob/master/FinBuddy/App%20Screenshots/LoginPage.jpg =810x1710)
+  - **Account creation**:
     - User has to add Name, email and password. Users can optionally add a profile picture.
     ![Create Account Page](https://github.com/vishnudivakar31/FinBuddy/blob/master/FinBuddy/App%20Screenshots/CreateAccount.jpg)
-  - *Home Page* is a three tabbed view with options for overview, bill listings and settings. Users can add
+  - **Home Page** is a three tabbed view with options for overview, bill listings and settings. Users can add
     a bill from homepage, it is a global option so it won't be limited by any selected tab.
     - **Overview Tab**: This is the default selected tab for homepage. Here it shows insight of expenses for
       the current month. The pie chart shows the expense distribution by expense category and the page showcases
